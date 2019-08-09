@@ -1,0 +1,12 @@
+@import "../../styles/globals";
+
+.create-item-form{
+  &__wrapper{
+    padding: $paddingSmall;
+    background: #ffffff;
+
+    -webkit-box-shadow: 4px 4px 11px -9px rgba(0,0,0,1);
+    -moz-box-shadow: 4px 4px 11px -9px rgba(0,0,0,1);
+    box-shadow: 4px 4px 11px -9px rgba(0,0,0,1);
+  }
+}

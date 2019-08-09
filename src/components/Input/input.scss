@@ -1,0 +1,23 @@
+@import "../../styles/globals";
+
+.input{
+  &__wrapper{
+    width: 100%;
+    margin: $paddingNormal 0;
+  }
+  &__input{
+    width: 100%;
+  }
+  &__label{
+    color: $primary;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: $paddingSmall;
+  }
+  &__suggestion{
+    margin: $paddingSmall 0;
+    color: #666;
+    display: inline-block;
+    font-size: .85em;
+  }
+}

@@ -1,0 +1,9 @@
+@import "../../styles/globals";
+
+.change-controls {
+  &__button{
+    width: 100%;
+    text-align: center;
+    margin: $paddingSmall 0;
+  }
+}

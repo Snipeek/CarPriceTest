@@ -1,0 +1,23 @@
+@import "../../styles/globals";
+
+.change-mode-controls{
+  &__wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__title{
+    margin: 0;
+  }
+  &__buttons{
+    display: flex;
+  }
+  &__button{
+    background: transparent;
+    color: $textColor;
+    &_active{
+      background: $primary;
+      color: $textColorLight;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+@import "../../styles/globals";
+
+.item-list{
+  &__wrapper{
+    background: #f7f7f7;
+    padding: $paddingSmall;
+    -webkit-box-shadow: 4px 4px 11px -9px rgba(0,0,0,1);
+    -moz-box-shadow: 4px 4px 11px -9px rgba(0,0,0,1);
+    box-shadow: 4px 4px 11px -9px rgba(0,0,0,1);
+    margin: $paddingNormal 0;
+  }
+  &__head{
+    display: flex;
+  }
+  &__index{
+    color: $primary;
+  }
+  &__title{
+    font-size: 1em;
+    margin: 0;
+  }
+  &__attributes{
+    margin: 0;
+    padding: 0 $paddingSmall;
+
+    list-style-type: none;
+  }
+  &__attribute{
+    margin-bottom: $paddingSmall;
+  }
+}
