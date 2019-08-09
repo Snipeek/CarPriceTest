@@ -10,22 +10,22 @@ export const ItemList = (props: IDataItem) => {
         <Column span={12}>
             <div className="item-list__wrapper">
                 <Row>
-                    <Column md={1}>
+                    <Column span={1}>
                         <div className="item-list__index">
                             {props.index}
                         </div>
                     </Column>
-                    <Column md={3}>
+                    <Column span={3}>
                         <h5 className="item-list__title">
                             {props.title}
                         </h5>
                     </Column>
-                    <Column sm={12} md={8}>
+                    <Column span={8}>
                     {props.attributes && props.attributes.length ? (
                         <ul className="item-list__attributes">
                             <Row>
                                 {props.attributes.map((item, index) => (
-                                    <Column sm={4}>
+                                    <Column span={12} sm={4}>
                                         <li className="item-list__attribute" key={item + index}>
                                             {item}
                                         </li>

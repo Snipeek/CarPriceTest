@@ -4,12 +4,14 @@ import {IDataItem} from "../../data/data";
 import {Button} from "../Button/Button";
 import {Input} from "../Input/Input";
 import {connect} from "react-redux";
+import * as Yup from "yup";
+
 
 import {
     actionAddItem,
 } from "../../actions/main";
 
-import "./create-item-form.scss";
+import "./item-create.scss";
 
 const initialValues = {
     title: "",
@@ -17,17 +19,24 @@ const initialValues = {
     description: "",
 }
 
-interface ICreateItemFormProps {
+interface IItemCreateProps {
     addItem(item: IDataItem): void;
 }
 
-export const CreateItemForm = (props: ICreateItemFormProps) => {
+const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Заполните обязательное поле"),
+    attributes: Yup.string(),
+    description: Yup.string(),
+});
+
+export const ItemCreate = (props: IItemCreateProps) => {
     return(
-        <div className="create-item-form__wrapper">
+        <div className="item-create__wrapper">
             <h4>Добавить новый объект</h4>
-            <Form initialValues={initialValues} onSubmit={({ values, resetForm }) => {
+            <Form initialValues={initialValues} validationSchema={validationSchema} onSubmit={({ values, resetForm }) => {
                 if (values.attributes) {
                     values.attributes = values.attributes.split(";");
+                    values.attributes = values.attributes.filter((item: string) => item && item.length);
                 }
                 props.addItem(values);
                 resetForm();
@@ -50,4 +59,4 @@ export const CreateItemForm = (props: ICreateItemFormProps) => {
 export const CreateItemFormContainer = connect(() => ({
 }), dispatch => ({
     addItem: (item: IDataItem) => dispatch(actionAddItem(item)),
-}))(CreateItemForm);
+}))(ItemCreate);

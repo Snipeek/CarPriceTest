@@ -1,6 +1,7 @@
 import * as React from "react";
 import {ReactChild} from "react";
 import * as _ from "lodash";
+import {ObjectSchema} from "yup";
 
 export interface IFormRenderProps<Values> {
     values: Values;
@@ -12,10 +13,16 @@ export interface IFormRenderProps<Values> {
 
 export interface IFormProps<Values> {
     initialValues: Values;
-    onSubmit?(args: any): any;
+    validationSchema?: ObjectSchema<{}>;
+    onSubmit(args: any): any;
 
     children(params: IFormRenderProps<Values>): ReactChild | ReactChild[] | null;
 }
+
+type stateErrors<Values> = {
+    [K in keyof Values]?: string;
+};
+
 
 export interface IControlDecoratorConfig {
     name: string;
@@ -23,6 +30,7 @@ export interface IControlDecoratorConfig {
 
 interface IFromState<Values> {
     values: Values;
+    errors: stateErrors<Values>;
 }
 
 export class Form<Values> extends React.Component<IFormProps<Values>, IFromState<Values>> {
@@ -35,6 +43,7 @@ export class Form<Values> extends React.Component<IFormProps<Values>, IFromState
         super(props);
         this.state = {
             values: Object.assign({}, props.initialValues),
+            errors: {},
         };
     }
 
@@ -59,14 +68,37 @@ export class Form<Values> extends React.Component<IFormProps<Values>, IFromState
         );
     }
 
-    public submitForm = (): Values => {
-        if (this.props.onSubmit) {
-            this.props.onSubmit({
-                values: Object.assign({}, this.state.values),
-                resetForm: this.resetForm(),
-            });
+    public submitForm = () => {
+        const errors = this.formValidation();
+
+        if (Object.keys(errors).length) {
+            this.setState({ errors });
+            return;
         }
-        return this.state.values;
+
+        this.props.onSubmit({
+            values: Object.assign({}, this.state.values),
+            resetForm: this.resetForm,
+        });
+    }
+
+    private formValidation = () => {
+        const errors: stateErrors<Values> = {};
+
+        if (this.props.validationSchema) {
+            try {
+                this.props.validationSchema.validateSync(this.state.values, {abortEarly: false});
+            } catch (ValidationErrors) {
+                ValidationErrors.inner.forEach((validateError: any) => {
+                    const name = validateError.path;
+                    if (name) {
+                        errors[name as keyof Values] = validateError.message;
+                    }
+                });
+            }
+        }
+
+        return errors;
     }
 
     public resetForm = () => {
@@ -80,6 +112,9 @@ export class Form<Values> extends React.Component<IFormProps<Values>, IFromState
 
     private handleChange = (e: React.ChangeEvent<any>) => {
         const values: Values = Object.assign({}, this.state.values, { [e.target.name]: e.target.value });
+        if (this.state.errors[e.target.name as keyof Values]) {
+            delete this.state.errors[e.target.name as keyof Values];
+        }
         this.setState({
             values,
         });
@@ -89,7 +124,8 @@ export class Form<Values> extends React.Component<IFormProps<Values>, IFromState
         return React.cloneElement(component, {
             onChange: this.handleChange,
             name: config.name,
-            value: this.state.values[config.name],
+            value: this.state.values[config.name as keyof Values],
+            error: this.state.errors[config.name as keyof Values] || undefined,
             ...component.props,
         });
     }

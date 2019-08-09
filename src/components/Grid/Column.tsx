@@ -41,9 +41,7 @@ export const Column = (props: IColumnProps) => {
     if (classes.indexOf("col") === -1) {
         classes = classNameGenerator("", {span: props.span});
     }
-    if (classes.indexOf("col") === -1) {
-        classes += " col ";
-    }
+    classes += classNameGenerator("", {span: props.span || 12});
     classes += " " +  props.className;
 
     return (<div className={classes} style={props.style}>{props.children}</div>);

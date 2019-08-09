@@ -13,11 +13,18 @@
     font-weight: bold;
     display: inline-block;
     margin-bottom: $paddingSmall;
+    &_error{
+      color: $error;
+    }
   }
   &__suggestion{
     margin: $paddingSmall 0;
     color: #666;
     display: inline-block;
     font-size: .85em;
+  }
+  &__error{
+    font-size: .85em;
+    color: $error;
   }
 }
